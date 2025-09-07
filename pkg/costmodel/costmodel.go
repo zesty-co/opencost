@@ -1058,60 +1058,36 @@ func (cm *CostModel) GetNodeCost(cp costAnalyzerCloud.Provider) (map[string]*cos
 			cpu = 0
 		}
 
-		var ram float64
 		if newCnode.RAM == "" {
 			newCnode.RAM = n.Status.Capacity.Memory().String()
 		}
-		ram = float64(n.Status.Capacity.Memory().Value())
+		if newCnode.RAMBytes == "" {
+			newCnode.RAMBytes = fmt.Sprintf("%v", n.Status.Capacity.Memory().Value())
+		}
+		ram, _ := strconv.ParseFloat(newCnode.RAMBytes, 64)
 		if math.IsNaN(ram) {
 			log.Warnf("ram parsed as NaN. Setting to 0.")
 			ram = 0
 		}
 
-		newCnode.RAMBytes = fmt.Sprintf("%f", ram)
-
-		// Azure does not seem to provide a GPU count in its pricing API. GKE supports attaching multiple GPUs
-		// So the k8s api will often report more accurate results for GPU count under status > capacity > nvidia.com/gpu than the cloud providers billing data
-		// not all providers are guaranteed to use this, so don't overwrite a Provider assignment if we can't find something under that capacity exists
-		gpuc := 0.0
-		q, ok := n.Status.Capacity["nvidia.com/gpu"]
-		_, hasReplicas := n.Labels["nvidia.com/gpu.replicas"]
-
-		if ok && !hasReplicas {
-			gpuCount := q.Value()
-			if gpuCount != 0 {
-				newCnode.GPU = fmt.Sprintf("%d", gpuCount)
-				newCnode.VGPU = newCnode.GPU
-				gpuc = float64(gpuCount)
-			}
-		} else if hasReplicas { // See https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-sharing.html
-			if q.Value() == 0 {
-				q = n.Status.Capacity["nvidia.com/gpu.shared"]
-			}
-			g, ok := n.Labels["nvidia.com/gpu.count"]
-			if ok {
-				newCnode.GPU = g
-			} else {
-				newCnode.GPU = fmt.Sprintf("%d", 0)
-			}
-			newCnode.VGPU = fmt.Sprintf("%d", q.Value())
-
-		} else if g, ok := n.Status.Capacity["k8s.amazonaws.com/vgpu"]; ok {
-			gpuCount := g.Value()
-			if gpuCount != 0 {
-				newCnode.GPU = fmt.Sprintf("%d", int(float64(gpuCount)/vgpuCoeff))
-				newCnode.VGPU = fmt.Sprintf("%d", gpuCount)
-				gpuc = float64(gpuCount) / vgpuCoeff
-			}
-		} else {
-			gpuc, err = strconv.ParseFloat(newCnode.GPU, 64)
-			if err != nil {
-				gpuc = 0.0
-			}
-		}
-		if math.IsNaN(gpuc) {
-			log.Warnf("gpu count parsed as NaN. Setting to 0.")
+		gpuc, err := strconv.ParseFloat(newCnode.GPU, 64)
+		if err != nil {
 			gpuc = 0.0
+		}
+
+		// The k8s API will often report more accurate results for GPU count
+		// than cloud provider public pricing APIs. If found, override the
+		// original value.
+		gpuOverride, vgpuOverride, err := getGPUCount(cm.Cache, n)
+		if err != nil {
+			log.Warnf("Unable to get GPUCount for node %s: %s", n.Name, err.Error())
+		}
+		if gpuOverride > 0 {
+			newCnode.GPU = fmt.Sprintf("%f", gpuOverride)
+			gpuc = gpuOverride
+		}
+		if vgpuOverride > 0 {
+			newCnode.VGPU = fmt.Sprintf("%f", vgpuOverride)
 		}
 
 		// Special case for SUSE rancher, since it won't behave with normal
@@ -1131,6 +1107,38 @@ func (cm *CostModel) GetNodeCost(cp costAnalyzerCloud.Provider) (map[string]*cos
 			if math.IsNaN(defaultCPUCorePrice) {
 				log.Warnf("defaultCPU parsed as NaN. Setting to 0.")
 				defaultCPUCorePrice = 0
+			}
+
+			// Some customers may want GPU pricing to be determined by the labels affixed to their nodes. GpuPricing
+			// passes the node's labels to the provider, which then cross-references them with the labels that the
+			// provider knows to have label-specific costs associated with them, and returns that cost. See CSVProvider
+			// for an example implementation.
+			var gpuPrice float64
+			gpuPricing, err := cp.GpuPricing(nodeLabels)
+			if err != nil {
+				log.Errorf("Could not determine custom GPU pricing: %s", err)
+				gpuPrice = 0
+			} else if len(gpuPricing) > 0 {
+				gpuPrice, err = strconv.ParseFloat(gpuPricing, 64)
+				if err != nil {
+					log.Errorf("Could not parse custom GPU pricing: %s", err)
+					gpuPrice = 0
+				} else if math.IsNaN(gpuPrice) {
+					log.Warnf("Custom GPU pricing parsed as NaN. Setting to 0.")
+					gpuPrice = 0
+				} else {
+					log.Infof("Using custom GPU pricing for node \"%s\": %f", name, gpuPrice)
+				}
+			} else {
+				gpuPrice, err = strconv.ParseFloat(cfg.GPU, 64)
+				if err != nil {
+					log.Errorf("Could not parse default gpu price")
+					gpuPrice = 0
+				}
+				if math.IsNaN(gpuPrice) {
+					log.Warnf("defaultGPU parsed as NaN. Setting to 0.")
+					gpuPrice = 0
+				}
 			}
 
 			defaultRAMPrice, err := strconv.ParseFloat(cfg.RAM, 64)
