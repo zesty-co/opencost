@@ -25,6 +25,7 @@ const (
 	AWSAccessKeySecretEnvVar = "AWS_SECRET_ACCESS_KEY"
 	AWSClusterIDEnvVar       = "AWS_CLUSTER_ID"
 	AWSPricingURL            = "AWS_PRICING_URL"
+	AWSECSPricingURL         = "AWS_ECS_PRICING_URL"
 
 	AlibabaAccessKeyIDEnvVar     = "ALIBABA_ACCESS_KEY_ID"
 	AlibabaAccessKeySecretEnvVar = "ALIBABA_SECRET_ACCESS_KEY"
@@ -78,9 +79,6 @@ const (
 	ExportCSVLabelsList = "EXPORT_CSV_LABELS_LIST"
 	ExportCSVLabelsAll  = "EXPORT_CSV_LABELS_ALL"
 	ExportCSVMaxDays    = "EXPORT_CSV_MAX_DAYS"
-
-	DataRetentionDailyResolutionDaysEnvVar   = "DATA_RETENTION_DAILY_RESOLUTION_DAYS"
-	DataRetentionHourlyResolutionHoursEnvVar = "DATA_RETENTION_HOURLY_RESOLUTION_HOURS"
 
 	CarbonEstimatesEnabledEnvVar = "CARBON_ESTIMATES_ENABLED"
 
@@ -186,6 +184,11 @@ func GetAWSClusterID() string {
 // GetAWSPricingURL returns an optional alternative URL to fetch AWS pricing data from; for use in airgapped environments
 func GetAWSPricingURL() string {
 	return env.Get(AWSPricingURL, "")
+}
+
+// GetAWSECSPricingURL returns an optional alternative URL to fetch AmazonECS pricing data from; for use in airgapped environments
+func GetAWSECSPricingURL() string {
+	return env.Get(AWSECSPricingURL, "")
 }
 
 // GetAlibabaAccessKeyID returns the environment variable value for AlibabaAccessKeyIDEnvVar which represents
@@ -330,14 +333,6 @@ func GetRegionOverrideList() []string {
 	}
 
 	return regionList
-}
-
-func GetDataRetentionDailyResolutionDays() int64 {
-	return env.GetInt64(DataRetentionDailyResolutionDaysEnvVar, 30)
-}
-
-func GetDataRetentionHourlyResolutionHours() int64 {
-	return env.GetInt64(DataRetentionHourlyResolutionHoursEnvVar, 49)
 }
 
 func IsKubernetesEnabled() bool {
