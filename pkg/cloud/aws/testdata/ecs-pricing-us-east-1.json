@@ -1,0 +1,252 @@
+{
+    "formatVersion": "v1.0",
+    "disclaimer": "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. Free Tier pricing is also available at http://aws.amazon.com/free/",
+    "offerCode": "AmazonECS",
+    "version": "20250801000000",
+    "publicationDate": "2025-08-01T00:00:00Z",
+    "products": {
+        "8CESGAFWKAJ98PME": {
+            "sku": "8CESGAFWKAJ98PME",
+            "productFamily": "Compute",
+            "attributes": {
+                "servicecode": "AmazonECS",
+                "location": "US East (N. Virginia)",
+                "locationType": "AWS Region",
+                "usagetype": "Fargate-vCPU-Hours:perCPU",
+                "operation": "FargateTask",
+                "servicename": "Amazon Elastic Container Service",
+                "regionCode": "us-east-1"
+            }
+        },
+        "PBZNQUSEXZUC34C9": {
+            "sku": "PBZNQUSEXZUC34C9",
+            "productFamily": "Compute",
+            "attributes": {
+                "servicecode": "AmazonECS",
+                "location": "US East (N. Virginia)",
+                "locationType": "AWS Region",
+                "usagetype": "Fargate-GB-Hours",
+                "operation": "FargateTask",
+                "servicename": "Amazon Elastic Container Service",
+                "regionCode": "us-east-1"
+            }
+        },
+        "XSZATS4VYMDC9CYN": {
+            "sku": "XSZATS4VYMDC9CYN",
+            "productFamily": "Compute",
+            "attributes": {
+                "servicecode": "AmazonECS",
+                "location": "US East (N. Virginia)",
+                "locationType": "AWS Region",
+                "usagetype": "Fargate-ARM-vCPU-Hours:perCPU",
+                "operation": "FargateTask",
+                "servicename": "Amazon Elastic Container Service",
+                "regionCode": "us-east-1"
+            }
+        },
+        "UNH9KPQP7W7C66C9": {
+            "sku": "UNH9KPQP7W7C66C9",
+            "productFamily": "Compute",
+            "attributes": {
+                "servicecode": "AmazonECS",
+                "location": "US East (N. Virginia)",
+                "locationType": "AWS Region",
+                "usagetype": "Fargate-ARM-GB-Hours",
+                "operation": "FargateTask",
+                "servicename": "Amazon Elastic Container Service",
+                "regionCode": "us-east-1"
+            }
+        },
+        "WINDOWS_CPU_SKU": {
+            "sku": "WINDOWS_CPU_SKU",
+            "productFamily": "Compute",
+            "attributes": {
+                "servicecode": "AmazonECS",
+                "location": "US East (N. Virginia)",
+                "locationType": "AWS Region",
+                "usagetype": "Fargate-Windows-vCPU-Hours:perCPU",
+                "operation": "FargateTask",
+                "servicename": "Amazon Elastic Container Service",
+                "regionCode": "us-east-1"
+            }
+        },
+        "9D3ZWXRS2VXMZET6": {
+            "sku": "9D3ZWXRS2VXMZET6",
+            "productFamily": "Compute",
+            "attributes": {
+                "servicecode": "AmazonECS",
+                "location": "US East (N. Virginia)",
+                "locationType": "AWS Region",
+                "usagetype": "Fargate-Windows-OS-Hours:perCPU",
+                "operation": "FargateTask",
+                "servicename": "Amazon Elastic Container Service",
+                "regionCode": "us-east-1"
+            }
+        },
+        "8QDMJPGQCM368Z6X": {
+            "sku": "8QDMJPGQCM368Z6X",
+            "productFamily": "Compute",
+            "attributes": {
+                "servicecode": "AmazonECS",
+                "location": "US East (N. Virginia)",
+                "locationType": "AWS Region",
+                "usagetype": "Fargate-Windows-GB-Hours",
+                "operation": "FargateTask",
+                "servicename": "Amazon Elastic Container Service",
+                "regionCode": "us-east-1"
+            }
+        }
+    },
+    "terms": {
+        "OnDemand": {
+            "8CESGAFWKAJ98PME": {
+                "8CESGAFWKAJ98PME.JRTCKXETXF": {
+                    "offerTermCode": "JRTCKXETXF",
+                    "sku": "8CESGAFWKAJ98PME",
+                    "effectiveDate": "2025-08-01T00:00:00Z",
+                    "priceDimensions": {
+                        "8CESGAFWKAJ98PME.JRTCKXETXF.6YS6EN2CT7": {
+                            "rateCode": "8CESGAFWKAJ98PME.JRTCKXETXF.6YS6EN2CT7",
+                            "description": "AWS Fargate - vCPU - US East (N.Virginia)",
+                            "beginRange": "0",
+                            "endRange": "Inf",
+                            "unit": "hours",
+                            "pricePerUnit": {
+                                "USD": "0.0404800000"
+                            },
+                            "appliesTo": []
+                        }
+                    },
+                    "termAttributes": {}
+                }
+            },
+            "PBZNQUSEXZUC34C9": {
+                "PBZNQUSEXZUC34C9.JRTCKXETXF": {
+                    "offerTermCode": "JRTCKXETXF",
+                    "sku": "PBZNQUSEXZUC34C9",
+                    "effectiveDate": "2025-08-01T00:00:00Z",
+                    "priceDimensions": {
+                        "PBZNQUSEXZUC34C9.JRTCKXETXF.6YS6EN2CT7": {
+                            "rateCode": "PBZNQUSEXZUC34C9.JRTCKXETXF.6YS6EN2CT7",
+                            "description": "AWS Fargate - Memory  - US East (N.Virginia)",
+                            "beginRange": "0",
+                            "endRange": "Inf",
+                            "unit": "hours",
+                            "pricePerUnit": {
+                                "USD": "0.0044450000"
+                            },
+                            "appliesTo": []
+                        }
+                    },
+                    "termAttributes": {}
+                }
+            },
+            "XSZATS4VYMDC9CYN": {
+                "XSZATS4VYMDC9CYN.JRTCKXETXF": {
+                    "offerTermCode": "JRTCKXETXF",
+                    "sku": "XSZATS4VYMDC9CYN",
+                    "effectiveDate": "2025-08-01T00:00:00Z",
+                    "priceDimensions": {
+                        "XSZATS4VYMDC9CYN.JRTCKXETXF.6YS6EN2CT7": {
+                            "rateCode": "XSZATS4VYMDC9CYN.JRTCKXETXF.6YS6EN2CT7",
+                            "description": "AWS Fargate - ARM - vCPU - US East (N. Virginia)",
+                            "beginRange": "0",
+                            "endRange": "Inf",
+                            "unit": "hours",
+                            "pricePerUnit": {
+                                "USD": "0.0323800000"
+                            },
+                            "appliesTo": []
+                        }
+                    },
+                    "termAttributes": {}
+                }
+            },
+            "UNH9KPQP7W7C66C9": {
+                "UNH9KPQP7W7C66C9.JRTCKXETXF": {
+                    "offerTermCode": "JRTCKXETXF",
+                    "sku": "UNH9KPQP7W7C66C9",
+                    "effectiveDate": "2025-08-01T00:00:00Z",
+                    "priceDimensions": {
+                        "UNH9KPQP7W7C66C9.JRTCKXETXF.6YS6EN2CT7": {
+                            "rateCode": "UNH9KPQP7W7C66C9.JRTCKXETXF.6YS6EN2CT7",
+                            "description": "AWS Fargate - ARM - Memory - US East (N. Virginia)",
+                            "beginRange": "0",
+                            "endRange": "Inf",
+                            "unit": "hours",
+                            "pricePerUnit": {
+                                "USD": "0.0035600000"
+                            },
+                            "appliesTo": []
+                        }
+                    },
+                    "termAttributes": {}
+                }
+            },
+            "WINDOWS_CPU_SKU": {
+                "WINDOWS_CPU_SKU.JRTCKXETXF": {
+                    "offerTermCode": "JRTCKXETXF",
+                    "sku": "WINDOWS_CPU_SKU",
+                    "effectiveDate": "2025-08-01T00:00:00Z",
+                    "priceDimensions": {
+                        "WINDOWS_CPU_SKU.JRTCKXETXF.6YS6EN2CT7": {
+                            "rateCode": "WINDOWS_CPU_SKU.JRTCKXETXF.6YS6EN2CT7",
+                            "description": "AWS Fargate - Windows - vCPU - US East (N.Virginia)",
+                            "beginRange": "0",
+                            "endRange": "Inf",
+                            "unit": "hours",
+                            "pricePerUnit": {
+                                "USD": "0.0465520000"
+                            },
+                            "appliesTo": []
+                        }
+                    },
+                    "termAttributes": {}
+                }
+            },
+            "9D3ZWXRS2VXMZET6": {
+                "9D3ZWXRS2VXMZET6.JRTCKXETXF": {
+                    "offerTermCode": "JRTCKXETXF",
+                    "sku": "9D3ZWXRS2VXMZET6",
+                    "effectiveDate": "2025-08-01T00:00:00Z",
+                    "priceDimensions": {
+                        "9D3ZWXRS2VXMZET6.JRTCKXETXF.6YS6EN2CT7": {
+                            "rateCode": "9D3ZWXRS2VXMZET6.JRTCKXETXF.6YS6EN2CT7",
+                            "description": "AWS Fargate - Windows - OS - US East (N.Virginia)",
+                            "beginRange": "0",
+                            "endRange": "Inf",
+                            "unit": "hours",
+                            "pricePerUnit": {
+                                "USD": "0.0460000000"
+                            },
+                            "appliesTo": []
+                        }
+                    },
+                    "termAttributes": {}
+                }
+            },
+            "8QDMJPGQCM368Z6X": {
+                "8QDMJPGQCM368Z6X.JRTCKXETXF": {
+                    "offerTermCode": "JRTCKXETXF",
+                    "sku": "8QDMJPGQCM368Z6X",
+                    "effectiveDate": "2025-08-01T00:00:00Z",
+                    "priceDimensions": {
+                        "8QDMJPGQCM368Z6X.JRTCKXETXF.6YS6EN2CT7": {
+                            "rateCode": "8QDMJPGQCM368Z6X.JRTCKXETXF.6YS6EN2CT7",
+                            "description": "AWS Fargate - Windows - Memory  - US East (N.Virginia)",
+                            "beginRange": "0",
+                            "endRange": "Inf",
+                            "unit": "hours",
+                            "pricePerUnit": {
+                                "USD": "0.0051117500"
+                            },
+                            "appliesTo": []
+                        }
+                    },
+                    "termAttributes": {}
+                }
+            }
+        }
+    },
+    "attributesList": {}
+}
