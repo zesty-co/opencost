@@ -774,7 +774,7 @@ func getStorageClassTypeFrom(provisioner string) string {
 // GetKey maps node labels to information needed to retrieve pricing data
 func (aws *AWS) GetKey(labels map[string]string, n *v1.Node) models.Key {
 	return &awsKey{
-		Name:           n.Name,
+		Name:           n.GetName(),
 		SpotLabelName:  aws.SpotLabelName,
 		SpotLabelValue: aws.SpotLabelValue,
 		Labels:         labels,
