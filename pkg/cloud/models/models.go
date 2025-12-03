@@ -317,6 +317,7 @@ type Provider interface {
 	DownloadPricingData() error
 	GetKey(map[string]string, *v1.Node) Key
 	GetPVKey(*v1.PersistentVolume, map[string]string, string) PVKey
+	GpuPricing(nodeLabels map[string]string) (string, error)
 	UpdateConfig(r io.Reader, updateType string) (*CustomPricing, error)
 	UpdateConfigFromConfigMap(map[string]string) (*CustomPricing, error)
 	GetConfig() (*CustomPricing, error)

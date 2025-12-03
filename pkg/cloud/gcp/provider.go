@@ -1466,6 +1466,10 @@ func (gcp *GCP) GetPVKey(pv *v1.PersistentVolume, parameters map[string]string, 
 	}
 }
 
+func (gcp *GCP) GpuPricing(nodeLabels map[string]string) (string, error) {
+	return "", nil
+}
+
 func (key *pvKey) Features() string {
 	// TODO: regional cluster pricing.
 	storageClass := key.StorageClassParameters["type"]

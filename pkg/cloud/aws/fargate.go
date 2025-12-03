@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/opencost/opencost/core/pkg/clustercache"
 	"github.com/opencost/opencost/core/pkg/log"
 	"github.com/opencost/opencost/pkg/env"
+	v1 "k8s.io/api/core/v1"
 )
 
 const (
@@ -53,7 +53,7 @@ func NewFargatePricing() *FargatePricing {
 	}
 }
 
-func (f *FargatePricing) Initialize(nodeList []*clustercache.Node) error {
+func (f *FargatePricing) Initialize(nodeList []*v1.Node) error {
 	url := f.getPricingURL(nodeList)
 
 	log.Infof("Downloading Fargate pricing data from %s", url)
@@ -71,7 +71,7 @@ func (f *FargatePricing) Initialize(nodeList []*clustercache.Node) error {
 	return f.populatePricing(&pricing)
 }
 
-func (f *FargatePricing) getPricingURL(nodeList []*clustercache.Node) string {
+func (f *FargatePricing) getPricingURL(nodeList []*v1.Node) string {
 	// Allow override of pricing URL for air-gapped environments
 	if override := env.GetAWSECSPricingURL(); override != "" {
 		return override

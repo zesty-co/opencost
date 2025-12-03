@@ -719,6 +719,10 @@ func (aws *AWS) GetPVKey(pv *v1.PersistentVolume, parameters map[string]string, 
 	}
 }
 
+func (aws *AWS) GpuPricing(nodeLabels map[string]string) (string, error) {
+	return "", nil
+}
+
 func (key *awsPVKey) ID() string {
 	return key.ProviderID
 }
@@ -826,8 +830,8 @@ func getPricingListURL(serviceCode string, nodeList []*v1.Node) string {
 // Use the pricing data from the current region. Fall back to using all region data if needed.
 func (aws *AWS) getRegionPricing(nodeList []*v1.Node) (*http.Response, string, error) {
 	var pricingURL string
-	if env.GetAWSPricingURL() != "" { // Allow override of pricing URL
-		pricingURL = env.GetAWSPricingURL()
+	if ocenv.GetAWSPricingURL() != "" { // Allow override of pricing URL
+		pricingURL = ocenv.GetAWSPricingURL()
 	} else {
 		pricingURL = getPricingListURL("AmazonEC2", nodeList)
 	}
@@ -1410,7 +1414,7 @@ func (aws *AWS) createNode(terms *AWSProductTerms, usageType string, k models.Ke
 	}, meta, nil
 }
 
-func (aws *AWS) getFargatePod(awsKey *awsKey) (*clustercache.Pod, bool) {
+func (aws *AWS) getFargatePod(awsKey *awsKey) (*v1.Pod, bool) {
 	pods := aws.Clientset.GetAllPods()
 	for _, pod := range pods {
 		if pod.Spec.NodeName == awsKey.Name {

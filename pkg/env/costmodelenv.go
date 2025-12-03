@@ -2,6 +2,7 @@ package env
 
 import (
 	"fmt"
+	"path"
 	"time"
 
 	"github.com/opencost/opencost/core/pkg/env"
@@ -446,6 +447,17 @@ func GetCostAnalyzerVolumeMountPath() string {
 // model configuration path
 func GetConfigPathWithDefault(defaultValue string) string {
 	return env.Get(ConfigPathEnvVar, defaultValue)
+}
+
+// GetConfigPath returns the environment variable value for ConfigPathEnvVar which represents the cost
+// model configuration path
+func GetConfigPath() string {
+	return env.Get(ConfigPathEnvVar, DefaultConfigMountPath)
+}
+
+func GetPathFromConfig(subPaths ...string) string {
+	subPath := path.Join(subPaths...)
+	return path.Join(GetConfigPath(), subPath)
 }
 
 // GetCloudProviderAPI returns the environment variable value for CloudProviderAPIEnvVar which represents

@@ -157,6 +157,10 @@ func (o *Oracle) GetPVKey(pv *v1.PersistentVolume, parameters map[string]string,
 	}
 }
 
+func (o *Oracle) GpuPricing(nodeLabels map[string]string) (string, error) {
+	return "", nil
+}
+
 func (o *Oracle) UpdateConfig(r io.Reader, _ string) (*models.CustomPricing, error) {
 	return o.Config.Update(func(pricing *models.CustomPricing) error {
 		a := make(map[string]interface{})

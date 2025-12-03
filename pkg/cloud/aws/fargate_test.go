@@ -7,7 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/opencost/opencost/core/pkg/clustercache"
+	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 var testRegionPricing = FargateRegionPricing{
@@ -293,16 +294,18 @@ func TestFargatePricing_Initialize(t *testing.T) {
 
 	tests := []struct {
 		name     string
-		nodeList []*clustercache.Node
+		nodeList []*v1.Node
 		wantErr  bool
 	}{
 		{
 			name: "successful initialization",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "us-east-1",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "us-east-1",
+						},
 					},
 				},
 			},
@@ -310,7 +313,7 @@ func TestFargatePricing_Initialize(t *testing.T) {
 		},
 		{
 			name:     "empty node list",
-			nodeList: []*clustercache.Node{},
+			nodeList: []*v1.Node{},
 			wantErr:  false,
 		},
 	}
@@ -368,11 +371,13 @@ func TestFargatePricing_Initialize_HTTPError(t *testing.T) {
 	t.Setenv("AWS_ECS_PRICING_URL", server.URL)
 
 	f := NewFargatePricing()
-	nodeList := []*clustercache.Node{
+	nodeList := []*v1.Node{
 		{
-			Name: "test-node",
-			Labels: map[string]string{
-				"topology.kubernetes.io/region": "us-east-1",
+			ObjectMeta: metav1.ObjectMeta{
+				Name: "test-node",
+				Labels: map[string]string{
+					"topology.kubernetes.io/region": "us-east-1",
+				},
 			},
 		},
 	}
@@ -396,11 +401,13 @@ func TestFargatePricing_Initialize_InvalidJSON(t *testing.T) {
 	t.Setenv("AWS_ECS_PRICING_URL", server.URL)
 
 	f := NewFargatePricing()
-	nodeList := []*clustercache.Node{
+	nodeList := []*v1.Node{
 		{
-			Name: "test-node",
-			Labels: map[string]string{
-				"topology.kubernetes.io/region": "us-east-1",
+			ObjectMeta: metav1.ObjectMeta{
+				Name: "test-node",
+				Labels: map[string]string{
+					"topology.kubernetes.io/region": "us-east-1",
+				},
 			},
 		},
 	}
@@ -414,17 +421,19 @@ func TestFargatePricing_Initialize_InvalidJSON(t *testing.T) {
 func TestFargatePricing_getPricingURL(t *testing.T) {
 	tests := []struct {
 		name     string
-		nodeList []*clustercache.Node
+		nodeList []*v1.Node
 		envVar   string
 		expected string
 	}{
 		{
 			name: "with environment variable override",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "us-east-1",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "us-east-1",
+						},
 					},
 				},
 			},
@@ -433,11 +442,13 @@ func TestFargatePricing_getPricingURL(t *testing.T) {
 		},
 		{
 			name: "without environment variable - single region",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "us-west-2",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "us-west-2",
+						},
 					},
 				},
 			},
@@ -446,11 +457,13 @@ func TestFargatePricing_getPricingURL(t *testing.T) {
 		},
 		{
 			name: "without environment variable - Chinese region",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "cn-north-1",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "cn-north-1",
+						},
 					},
 				},
 			},
@@ -459,7 +472,7 @@ func TestFargatePricing_getPricingURL(t *testing.T) {
 		},
 		{
 			name:     "without environment variable - empty node list",
-			nodeList: []*clustercache.Node{},
+			nodeList: []*v1.Node{},
 			envVar:   "",
 			expected: "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonECS/current/index.json",
 		},

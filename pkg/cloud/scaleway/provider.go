@@ -226,6 +226,10 @@ func (c *Scaleway) GetPVKey(pv *v1.PersistentVolume, parameters map[string]strin
 	}
 }
 
+func (c *Scaleway) GpuPricing(nodeLabels map[string]string) (string, error) {
+	return "", nil
+}
+
 func (c *Scaleway) PVPricing(pvk models.PVKey) (*models.PV, error) {
 	c.DownloadPricingDataLock.RLock()
 	defer c.DownloadPricingDataLock.RUnlock()

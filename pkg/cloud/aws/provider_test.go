@@ -11,7 +11,12 @@ import (
 	"testing"
 
 	"github.com/opencost/opencost/pkg/cloud/models"
+	appsv1 "k8s.io/api/apps/v1"
+	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
+	policyv1 "k8s.io/api/policy/v1"
+	stv1 "k8s.io/api/storage/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func Test_awsKey_getUsageType(t *testing.T) {
@@ -867,17 +872,19 @@ func TestGetPricingListURL(t *testing.T) {
 	tests := []struct {
 		name        string
 		serviceCode string
-		nodeList    []*clustercache.Node
+		nodeList    []*v1.Node
 		expected    string
 	}{
 		{
 			name:        "AmazonEC2 service with us-east-1 region",
 			serviceCode: "AmazonEC2",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "us-east-1",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "us-east-1",
+						},
 					},
 				},
 			},
@@ -886,11 +893,13 @@ func TestGetPricingListURL(t *testing.T) {
 		{
 			name:        "AmazonECS service with us-west-2 region",
 			serviceCode: "AmazonECS",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "us-west-2",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "us-west-2",
+						},
 					},
 				},
 			},
@@ -899,11 +908,13 @@ func TestGetPricingListURL(t *testing.T) {
 		{
 			name:        "Chinese region cn-north-1",
 			serviceCode: "AmazonEC2",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "cn-north-1",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "cn-north-1",
+						},
 					},
 				},
 			},
@@ -912,11 +923,13 @@ func TestGetPricingListURL(t *testing.T) {
 		{
 			name:        "Chinese region cn-northwest-1",
 			serviceCode: "AmazonECS",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "cn-northwest-1",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "cn-northwest-1",
+						},
 					},
 				},
 			},
@@ -925,23 +938,27 @@ func TestGetPricingListURL(t *testing.T) {
 		{
 			name:        "empty node list - multiregion",
 			serviceCode: "AmazonEC2",
-			nodeList:    []*clustercache.Node{},
+			nodeList:    []*v1.Node{},
 			expected:    "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/index.json",
 		},
 		{
 			name:        "multiple regions - multiregion",
 			serviceCode: "AmazonECS",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node-1",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "us-east-1",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node-1",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "us-east-1",
+						},
 					},
 				},
 				{
-					Name: "test-node-2",
-					Labels: map[string]string{
-						"topology.kubernetes.io/region": "us-west-2",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node-2",
+						Labels: map[string]string{
+							"topology.kubernetes.io/region": "us-west-2",
+						},
 					},
 				},
 			},
@@ -950,11 +967,13 @@ func TestGetPricingListURL(t *testing.T) {
 		{
 			name:        "node without region label",
 			serviceCode: "AmazonEC2",
-			nodeList: []*clustercache.Node{
+			nodeList: []*v1.Node{
 				{
-					Name: "test-node",
-					Labels: map[string]string{
-						"some.other.label": "value",
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-node",
+						Labels: map[string]string{
+							"some.other.label": "value",
+						},
 					},
 				},
 			},
@@ -974,82 +993,88 @@ func TestGetPricingListURL(t *testing.T) {
 
 // Mock cluster cache for testing
 type mockClusterCache struct {
-	pods []*clustercache.Pod
+	pods []*v1.Pod
+}
+
+func (m *mockClusterCache) SetConfigMapUpdateFunc(f func(interface{})) {
+	return
 }
 
 func (m *mockClusterCache) Run()  {}
 func (m *mockClusterCache) Stop() {}
 
-func (m *mockClusterCache) GetAllPods() []*clustercache.Pod {
+func (m *mockClusterCache) GetAllPods() []*v1.Pod {
 	return m.pods
 }
 
-func (m *mockClusterCache) GetAllNodes() []*clustercache.Node {
+func (m *mockClusterCache) GetAllNodes() []*v1.Node {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllPersistentVolumes() []*clustercache.PersistentVolume {
+func (m *mockClusterCache) GetAllPersistentVolumes() []*v1.PersistentVolume {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllPersistentVolumeClaims() []*clustercache.PersistentVolumeClaim {
+func (m *mockClusterCache) GetAllPersistentVolumeClaims() []*v1.PersistentVolumeClaim {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllStorageClasses() []*clustercache.StorageClass {
+func (m *mockClusterCache) GetAllStorageClasses() []*stv1.StorageClass {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllServices() []*clustercache.Service {
+func (m *mockClusterCache) GetAllServices() []*v1.Service {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllDeployments() []*clustercache.Deployment {
+func (m *mockClusterCache) GetAllDeployments() []*appsv1.Deployment {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllDaemonSets() []*clustercache.DaemonSet {
+func (m *mockClusterCache) GetAllDaemonSets() []*appsv1.DaemonSet {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllStatefulSets() []*clustercache.StatefulSet {
+func (m *mockClusterCache) GetAllStatefulSets() []*appsv1.StatefulSet {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllReplicaSets() []*clustercache.ReplicaSet {
+func (m *mockClusterCache) GetAllReplicaSets() []*appsv1.ReplicaSet {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllJobs() []*clustercache.Job {
+func (m *mockClusterCache) GetAllJobs() []*batchv1.Job {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllNamespaces() []*clustercache.Namespace {
+func (m *mockClusterCache) GetAllNamespaces() []*v1.Namespace {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllPodDisruptionBudgets() []*clustercache.PodDisruptionBudget {
+func (m *mockClusterCache) GetAllPodDisruptionBudgets() []*policyv1.PodDisruptionBudget {
 	return nil
 }
 
-func (m *mockClusterCache) GetAllReplicationControllers() []*clustercache.ReplicationController {
+func (m *mockClusterCache) GetAllReplicationControllers() []*v1.ReplicationController {
 	return nil
 }
 
 func TestAWS_getFargatePod(t *testing.T) {
 	tests := []struct {
 		name     string
-		pods     []*clustercache.Pod
+		pods     []*v1.Pod
 		awsKey   *awsKey
-		wantPod  *clustercache.Pod
+		wantPod  *v1.Pod
 		wantBool bool
 	}{
 		{
 			name: "pod found for node",
-			pods: []*clustercache.Pod{
+			pods: []*v1.Pod{
 				{
-					Name: "test-pod",
-					Spec: clustercache.PodSpec{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-pod",
+					},
+					Spec: v1.PodSpec{
 						NodeName: "fargate-node-1",
 					},
 				},
@@ -1057,9 +1082,11 @@ func TestAWS_getFargatePod(t *testing.T) {
 			awsKey: &awsKey{
 				Name: "fargate-node-1",
 			},
-			wantPod: &clustercache.Pod{
-				Name: "test-pod",
-				Spec: clustercache.PodSpec{
+			wantPod: &v1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name: "test-pod",
+				},
+				Spec: v1.PodSpec{
 					NodeName: "fargate-node-1",
 				},
 			},
@@ -1067,10 +1094,12 @@ func TestAWS_getFargatePod(t *testing.T) {
 		},
 		{
 			name: "pod not found for node",
-			pods: []*clustercache.Pod{
+			pods: []*v1.Pod{
 				{
-					Name: "test-pod",
-					Spec: clustercache.PodSpec{
+					ObjectMeta: metav1.ObjectMeta{
+						Name: "test-pod",
+					},
+					Spec: v1.PodSpec{
 						NodeName: "different-node",
 					},
 				},
@@ -1083,7 +1112,7 @@ func TestAWS_getFargatePod(t *testing.T) {
 		},
 		{
 			name: "no pods in cluster",
-			pods: []*clustercache.Pod{},
+			pods: []*v1.Pod{},
 			awsKey: &awsKey{
 				Name: "fargate-node-1",
 			},

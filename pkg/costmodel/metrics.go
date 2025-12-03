@@ -471,7 +471,7 @@ func (cmme *CostModelMetricsEmitter) Start() bool {
 			}
 
 			// TODO: Pass CloudProvider into CostModel on instantiation so this isn't so awkward
-			nodes, err := cmme.Model.GetNodeCost(cmme.CloudProvider)
+			nodes, err := cmme.Model.GetNodeCost()
 			if err != nil {
 				log.Warnf("Error getting Node cost: %s", err)
 			}

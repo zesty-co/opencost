@@ -932,6 +932,10 @@ func (alibaba *Alibaba) GetPVKey(pv *v1.PersistentVolume, parameters map[string]
 	}
 }
 
+func (alibaba *Alibaba) GpuPricing(nodeLabels map[string]string) (string, error) {
+	return "", nil
+}
+
 func (alibabaPVKey *AlibabaPVKey) Features() string {
 	keyLookup := stringutil.DeleteEmptyStringsFromArray([]string{alibabaPVKey.RegionID, alibabaPVKey.PVSubType, alibabaPVKey.PVCategory, alibabaPVKey.PVPerformaceLevel, alibabaPVKey.SizeInGiB})
 	return strings.Join(keyLookup, "::")

@@ -338,6 +338,10 @@ func (*CustomProvider) GetPVKey(pv *v1.PersistentVolume, parameters map[string]s
 	}
 }
 
+func (*CustomProvider) GpuPricing(nodeLabels map[string]string) (string, error) {
+	return "", nil
+}
+
 func (key *customPVKey) ID() string {
 	return key.ProviderID
 }

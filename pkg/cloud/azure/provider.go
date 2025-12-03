@@ -1255,6 +1255,10 @@ func (az *Azure) GetPVKey(pv *v1.PersistentVolume, parameters map[string]string,
 	}
 }
 
+func (az *Azure) GpuPricing(nodeLabels map[string]string) (string, error) {
+	return "", nil
+}
+
 func (key *azurePvKey) ID() string {
 	return key.ProviderId
 }
